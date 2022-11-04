@@ -1,0 +1,21 @@
+INCAR created by Atomic Simulation Environment
+ ENCUT = 400.000000
+ ZAB_VDW = -1.886700
+ SIGMA = 0.050000
+ EDIFF = 1.00e-03
+ PREC = acc
+ GGA = BF
+ ALGO = normal
+ ISMEAR = 0
+ NPAR = 8
+ ISTART = 1
+ ICHARG = 2
+ NELM = 100
+ IBRION = -1
+ ISPIN = 1
+ LCHARG = .FALSE.
+ ADDGRID = .TRUE.
+ LUSE_VDW = .TRUE.
+ LWAVE = .TRUE.
+ LREAL = Auto
+ LBEEFENS=.TRUE.
