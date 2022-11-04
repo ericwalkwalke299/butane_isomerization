@@ -1,0 +1,41 @@
+#!/bin/bash
+#SBATCH --array=1
+#SBATCH -N 1 --ntasks-per-node=16 --time=72:00:00
+#SBATCH --output="slurm-%A_%a.out"
+##SBATCH --partition=debug --qos=debug
+##SBATCH --partition=skylake --qos=skylake
+##SBATCH --cluster=ub-hpc
+#SBATCH --constraint=MRI|NIH #request 'cascade' and 'skylake' nodes
+#SBATCH --time=72:00:00
+#SBATCH --cluster=ub-hpc
+#SBATCH --partition=general-compute
+#SBATCH --qos=general-compute
+#SBATCH --job-name=butane_isomerization_reverse
+#SBATCH --mail-user=ericwalk@buffalo.edu
+#SBATCH --mail-type=ALL
+
+module load intel/18.3
+module load mkl/2018.3
+module load python/py27-anaconda-2019.03 
+module load intel-mpi
+module load intel
+module load mkl
+module load intel-mpi
+module list
+ulimit -s unlimited
+# The initial srun will trigger the SLURM prologue on the compute nodes.
+NPROCS=`srun --nodes=${SLURM_NNODES} bash -c 'hostname' |wc -l`
+echo NPROCS=$NPROCS
+#The PMI library is necessary for srun
+export I_MPI_PMI_LIBRARY=/usr/lib64/libpmi.so
+echo $VASP_SCRIPT
+echo $VASP_PP_PATH
+export ASE_VASP_VDW=/projects/academic/ericwalk/software
+
+item=$SLURM_ARRAY_TASK_ID
+ID=`printf "%0*d\n" 4 ${item}`
+
+#export PATH=$PATH:/export/zimmerman/mjafari/vasp_exec/exec/mpi
+export VASP_NCORE=8
+export OMP_NUM_THREADS=2
+/projects/academic/ericwalk/software/surfaceGSM/gfstringq.exe $ID 4 > scratch/paragsm$ID
